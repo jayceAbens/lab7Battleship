@@ -39,9 +39,6 @@ bool playAgain(bool win, int wins, int losses);
 struct shipType {
 	string name;
 	int length;
-	int xCoord;
-	int yCoord;
-	char direction;
 };
 
 int main()
@@ -218,6 +215,9 @@ bool placeShip(int x, int y, int length, char direction, char shipChar, char gam
 void playerSetup(char gameBoard[10][10], struct shipType ship[5])
 {
 	char gameBoardTemp[10][10];
+	int xCoord;
+	int yCoord;
+	char direction;
 	bool inputError = false;
 	bool spaceOccupied = false;
 	string playerInput;
@@ -237,7 +237,7 @@ void playerSetup(char gameBoard[10][10], struct shipType ship[5])
 				if (spaceOccupied) cout << "\t[SPACE ALREADY OCCUPIED]\r";
 				cout << "X: ";
 
-				if (!(cin >> ship[i].xCoord) || ship[i].xCoord < 1 || ship[i].xCoord > 10)
+				if (!(cin >> xCoord) || xCoord < 1 || xCoord > 10)
 				{
 					cin.clear();
 					cin.ignore( 999, '\n');
@@ -249,10 +249,10 @@ void playerSetup(char gameBoard[10][10], struct shipType ship[5])
 					spaceOccupied = true;
 					for (int y = 0; y < 10; y++)
 					{
-						if (placeShip(ship[i].xCoord - 1, y, ship[i].length, 'U', '~', gameBoard) ||
-							placeShip(ship[i].xCoord - 1, y, ship[i].length, 'D', '~', gameBoard) ||
-							placeShip(ship[i].xCoord - 1, y, ship[i].length, 'L', '~', gameBoard) ||
-							placeShip(ship[i].xCoord - 1, y, ship[i].length, 'R', '~', gameBoard))
+						if (placeShip(xCoord - 1, y, ship[i].length, 'U', '~', gameBoard) ||
+							placeShip(xCoord - 1, y, ship[i].length, 'D', '~', gameBoard) ||
+							placeShip(xCoord - 1, y, ship[i].length, 'L', '~', gameBoard) ||
+							placeShip(xCoord - 1, y, ship[i].length, 'R', '~', gameBoard))
 						{
 							spaceOccupied = false;
 						}
@@ -262,16 +262,16 @@ void playerSetup(char gameBoard[10][10], struct shipType ship[5])
 				if (inputError || spaceOccupied) j = j - 1;
 				else
 				{
-					for (int y = 0; y < 10; y++) if (gameBoardTemp[ship[i].xCoord - 1][y] == '~') gameBoardTemp[ship[i].xCoord - 1][y] = '|';
+					for (int y = 0; y < 10; y++) if (gameBoardTemp[xCoord - 1][y] == '~') gameBoardTemp[xCoord - 1][y] = '|';
 				}
 				break;
 			case 1:
-				cout << "X: " << ship[i].xCoord << endl;
+				cout << "X: " << xCoord << endl;
 				if (inputError) cout << "\t[COORDINATE POINT OUT OF RANGE: 1-10]\r";
 				if (spaceOccupied) cout << "\t[SPACE ALREADY OCCUPIED]\r";
 				cout << "Y: ";
 
-				if (!(cin >> ship[i].yCoord) || ship[i].yCoord < 1 || ship[i].yCoord > 10)
+				if (!(cin >> yCoord) || yCoord < 1 || yCoord > 10)
 				{
 					cin.clear();
 					cin.ignore( 999, '\n');
@@ -280,10 +280,10 @@ void playerSetup(char gameBoard[10][10], struct shipType ship[5])
 				else
 				{
 					inputError = false;
-					if (placeShip(ship[i].xCoord - 1, ship[i].yCoord - 1, ship[i].length, 'U', '~', gameBoard) ||
-						placeShip(ship[i].xCoord - 1, ship[i].yCoord - 1, ship[i].length, 'D', '~', gameBoard) ||
-						placeShip(ship[i].xCoord - 1, ship[i].yCoord - 1, ship[i].length, 'L', '~', gameBoard) ||
-						placeShip(ship[i].xCoord - 1, ship[i].yCoord - 1, ship[i].length, 'R', '~', gameBoard))
+					if (placeShip(xCoord - 1, yCoord - 1, ship[i].length, 'U', '~', gameBoard) ||
+						placeShip(xCoord - 1, yCoord - 1, ship[i].length, 'D', '~', gameBoard) ||
+						placeShip(xCoord - 1, yCoord - 1, ship[i].length, 'L', '~', gameBoard) ||
+						placeShip(xCoord - 1, yCoord - 1, ship[i].length, 'R', '~', gameBoard))
 					{
 						spaceOccupied = false;
 					}
@@ -293,35 +293,35 @@ void playerSetup(char gameBoard[10][10], struct shipType ship[5])
 				if (inputError || spaceOccupied) j = j - 1;
 				else
 				{
-					for (int x = 0; x < 10; x++) if (gameBoardTemp[x][ship[i].yCoord - 1] == '~') gameBoardTemp[x][ship[i].yCoord - 1] = '-';
-					placeShip(ship[i].xCoord - 1, ship[i].yCoord - 1, ship[i].length, 'U', 'U', gameBoardTemp);
-					placeShip(ship[i].xCoord - 1, ship[i].yCoord - 1, ship[i].length, 'D', 'D', gameBoardTemp);
-					placeShip(ship[i].xCoord - 1, ship[i].yCoord - 1, ship[i].length, 'L', 'L', gameBoardTemp);
-					placeShip(ship[i].xCoord - 1, ship[i].yCoord - 1, ship[i].length, 'R', 'R', gameBoardTemp);
-					gameBoardTemp[ship[i].xCoord - 1][ship[i].yCoord - 1] = 'X';
+					for (int x = 0; x < 10; x++) if (gameBoardTemp[x][yCoord - 1] == '~') gameBoardTemp[x][yCoord - 1] = '-';
+					placeShip(xCoord - 1, yCoord - 1, ship[i].length, 'U', 'U', gameBoardTemp);
+					placeShip(xCoord - 1, yCoord - 1, ship[i].length, 'D', 'D', gameBoardTemp);
+					placeShip(xCoord - 1, yCoord - 1, ship[i].length, 'L', 'L', gameBoardTemp);
+					placeShip(xCoord - 1, yCoord - 1, ship[i].length, 'R', 'R', gameBoardTemp);
+					gameBoardTemp[xCoord - 1][yCoord - 1] = 'X';
 				}
 				break;
 			case 2:
-				cout << "X: " << ship[i].xCoord << endl;
-				cout << "Y: " << ship[i].yCoord << endl;
+				cout << "X: " << xCoord << endl;
+				cout << "Y: " << yCoord << endl;
 				if (spaceOccupied) cout << "\t\t[SPACE ALREADY OCCUPIED]\r";
 				if (inputError) cout << "\t\t[INVALID DIRECTION SELECTION: U-D-L-R ]\r";
 				cout << "Direction: ";
 
 				cin >> playerInput;
-				ship[i].direction = playerInput.at(0);
+				direction = playerInput.at(0);
 
-				if (!(ship[i].direction == 'U' || ship[i].direction == 'u' ||
-					ship[i].direction == 'D' || ship[i].direction == 'd' ||
-					ship[i].direction == 'L' || ship[i].direction == 'l' ||
-					ship[i].direction == 'R' || ship[i].direction == 'r'))
+				if (!(direction == 'U' || direction == 'u' ||
+					direction == 'D' || direction == 'd' ||
+					direction == 'L' || direction == 'l' ||
+					direction == 'R' || direction == 'r'))
 				{
 					inputError = true;
 				}
 				else
 				{
 					inputError = false;
-					if (!(placeShip(ship[i].xCoord - 1, ship[i].yCoord - 1, ship[i].length, ship[i].direction, '#', gameBoard))) spaceOccupied = true;
+					if (!(placeShip(xCoord - 1, yCoord - 1, ship[i].length, direction, '#', gameBoard))) spaceOccupied = true;
 					else spaceOccupied = false;
 				}
 
