@@ -32,7 +32,7 @@ void playerSetup(char gameBoard[10][10], struct shipType ship[5]);
 void computerSetup(char gameBoard[10][10], struct shipType ship[5]);
 bool placeShip(int x, int y, int length, char direction, char shipChar, char gameBoard[10][10]);
 void playerFire(char playerShots[10][10], char computerFleet[10][10]);
-void computerFire(char computerShots[10][10], char playerFleet[10][10]);
+bool computerFire(char computerShots[10][10], char playerFleet[10][10]);
 bool checkWin(char gameBoard[10][10]);
 bool playAgain(bool win, int wins, int losses);
 
@@ -89,8 +89,7 @@ int main()
 			}
 			else
 			{
-				computerFire(gameBoard[cShots], gameBoard[pFleet]);
-				if(checkWin(gameBoard[pFleet]))
+				if(computerFire(gameBoard[cShots], gameBoard[pFleet]) || checkWin(gameBoard[pFleet]))
 				{
 					cWin = true;
 					losses++;
@@ -464,7 +463,7 @@ void playerFire(char playerShots[10][10], char computerFleet[10][10])
 	}
 }
 
-void computerFire(char computerShots[10][10], char playerFleet[10][10])
+bool computerFire(char computerShots[10][10], char playerFleet[10][10])
 {
 	int x;
 	int y;
@@ -490,20 +489,44 @@ void computerFire(char computerShots[10][10], char playerFleet[10][10])
 		}
 	} while (invalidShot);
 
-	printBoard(playerFleet);
-	if (playerFleet[x][y] == 'H') cout << "\nCOMPUTER HIT!\n\n";
-	else cout << "\nCOMPUTER MISSED!\n\n";
-
-	// debugging printout
-	if (debugging)
+	string playerInput;
+	bool inputError = false;
+	do
 	{
-		cout << "\n\nComputer Shots:\n";
-		printBoard(computerShots);
-	}
-	
-	cout << flush;
-	system("PAUSE");
-	system("CLS");
+		printBoard(playerFleet);
+		if (playerFleet[x][y] == 'H') cout << "\nCOMPUTER HIT!\n\n";
+		else cout << "\nCOMPUTER MISSED!\n\n";
+
+		if (inputError) cout << "\t\t\t\t\t[Invalid Response: Y/N]\r";
+		cout << "Surrender? : ";
+		cin >> playerInput;
+		switch (playerInput.at(0))
+		{
+		case 'y':
+		case 'Y':
+			cout << flush;
+			system("CLS");
+			return true;
+		case 'n':
+		case 'N':
+			cout << flush;
+			system("CLS");
+			return false;
+		default:
+			inputError = true;
+		}
+
+		// debugging printout
+		if (debugging)
+		{
+			cout << "\n\nComputer Shots:\n";
+			printBoard(computerShots);
+		}
+
+		cout << endl << endl << flush;
+		system("PAUSE");
+		system("CLS");
+	} while (inputError);
 }
 
 bool checkWin(char gameBoard[10][10])
