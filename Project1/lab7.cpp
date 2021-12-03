@@ -79,21 +79,21 @@ int main()
 		do
 		{
 			playerFire(gameBoard[pShots], gameBoard[cFleet]);
-			if (checkWin(gameBoard[cFleet])) 
+			if (checkWin(gameBoard[cFleet])) // returns true if player won
 			{
 				pWin = true;
 				wins++;
 			}
 			else
 			{
-				if(computerFire(gameBoard[cShots], gameBoard[pFleet]) || checkWin(gameBoard[pFleet])) // computerFire returns true if player surrenders
+				if(computerFire(gameBoard[cShots], gameBoard[pFleet]) || checkWin(gameBoard[pFleet])) // computerFire returns true if player surrenders, check win returns true if computer won
 				{
 					cWin = true;
 					losses++;
 				}
 			}
-		} while (!pWin && !cWin);
-	} while (playAgain(pWin, wins, losses));
+		} while (!pWin && !cWin); // loops until computer or player win
+	} while (playAgain(pWin, wins, losses)); // loops entire game if player responds yes
 
 	return 0;
 }
@@ -500,20 +500,20 @@ bool computerFire(char computerShots[10][10], char playerFleet[10][10])
 	bool invalidShot;
 	do
 	{
-		x = rand() % 9;
+		x = rand() % 9;	// generates random shot coordinates
 		y = rand() % 9;
-		if (computerShots[x][y] != '~') invalidShot = true;
+		if (computerShots[x][y] != '~') invalidShot = true; // checks if valid shot location
 		else
 		{
 			invalidShot = false;
-			if (playerFleet[x][y] == '#')
+			if (playerFleet[x][y] == '#') // marks boards 'H' if hit
 			{
 				computerShots[x][y] = 'H';
 				playerFleet[x][y] = 'H';
 			}
 			else
 			{
-				computerShots[x][y] = 'M';
+				computerShots[x][y] = 'M'; // marks boards 'M' if not hit
 				playerFleet[x][y] = 'M';
 			}
 		}
@@ -524,7 +524,7 @@ bool computerFire(char computerShots[10][10], char playerFleet[10][10])
 	bool inputError = false;
 	do
 	{
-		printBoard(playerFleet);
+		printBoard(playerFleet);	// printout of computer's shots on players fleet with hit/miss message
 		if (playerFleet[x][y] == 'H') cout << "\nCOMPUTER HIT!\n\n";
 		else cout << "\nCOMPUTER MISSED!\n\n";
 
@@ -537,24 +537,24 @@ bool computerFire(char computerShots[10][10], char playerFleet[10][10])
 		}
 
 		if (inputError) cout << "\t\t\t\t\t[Invalid Response: Y/N]\r";
-		cout << "Surrender? : ";
+		cout << "Surrender? : ";	// asks player if they want to surrender
 		cin >> playerInput;
-		switch (playerInput.at(0))
+		switch (playerInput.at(0))	// takes only first character of input stream
 		{
 		case 'y':
 		case 'Y':
 			cout << flush;
 			system("CLS");
-			return true;
+			return true;	// returns true if surrender
 		case 'n':
 		case 'N':
 			cout << flush;
 			system("CLS");
-			return false;
+			return false;	// returns false if not surrender
 		default:
 			inputError = true;
 		}
-	} while (inputError);
+	} while (inputError);	// repears if not y/n answer
 }
 
 // Precondition :	a fleet gameboard (2 diminsional character array 10*10, containing ships '#', hits 'H', and misses 'M') is passed by reference.  
@@ -566,10 +566,10 @@ bool checkWin(char gameBoard[10][10])
 	{
 		for (int y = 0; y < 10; y++)
 		{
-			if (gameBoard[x][y] == '#') win = false;
+			if (gameBoard[x][y] == '#') win = false; // check every board position for prensence of any remaining ship character '#'
 		}
 	}
-	return win;
+	return win; // returns true if win, false if no win
 }
 
 // Precondition :	using namespace std, the iostream library is included, the player 'win' boolean, and wins and losses integers are passed by value
@@ -593,7 +593,7 @@ bool playAgain(bool win, int wins, int losses)
 			cout << "\t   \\  $/    /$$$$$$|  $$$$$$/   | $$  |  $$$$$$/| $$  | $$    | $$     /$$\n";
 			cout << "\t    \\_/    |______/ \\______/    |__/   \\______/ |__/  |__/    |__/    |__/\n\n";
 			cout << "------------------------------------------------------------------------------------------\n\n";
-			cout << "\t\t\t\tWINS: " << wins << "\t\tLOSSES: " << losses << endl << endl << endl;
+			cout << "\t\t\t\tWINS: " << wins << "\t\tLOSSES: " << losses << endl << endl << endl; // outputs win/loss count
 		}
 		else
 		{
@@ -606,15 +606,15 @@ bool playAgain(bool win, int wins, int losses)
 			cout << "\t| $$$$$$$/| $$$$$$$$| $$      | $$$$$$$$| $$  | $$   | $$    /$$\n";
 			cout << "\t|_______/ |________/|__/      |________/|__/  |__/   |__/   |__/\n\n";
 			cout << "--------------------------------------------------------------------------------\n\n";
-			cout << "\t\t\tWINS: " << wins << "\t\tLOSSES: " << losses << endl << endl << endl;
+			cout << "\t\t\tWINS: " << wins << "\t\tLOSSES: " << losses << endl << endl << endl;	// outputs win/loss count
 		}
-		if (inputError) cout << "\t\t\t\t\t[Invalid Response: Y/N]\r";
-		if (thanks)
+		if (inputError) cout << "\t\t\t\t\t[Invalid Response: Y/N]\r";	// error message if invalid input on last input
+		if (thanks)	// outputs thank you message if done playing
 		{
 			cout << "Would you like to play again? : " << playerInput.at(0) << "\tThanks for playing!\n\n\n";
-			return false;
+			return false; // returns false, ending program
 		}
-		cout << "Would you like to play again? : ";
+		cout << "Would you like to play again? : "; // prompts to play again
 		cin >> playerInput;
 		switch (playerInput.at(0))
 		{
@@ -622,16 +622,16 @@ bool playAgain(bool win, int wins, int losses)
 		case 'Y':
 			cout << flush;
 			system("CLS");
-			return true;
+			return true; // returns true if yes
 		case 'n':
 		case 'N':
 			inputError = false;
 			thanks = true;
-			break;
+			break;		// loops back to print thank you message if no
 		default:
-			inputError = true;
+			inputError = true;	// loops back for new input if invalid
 		}
 		cout << flush;
-		system("CLS");
+		system("CLS");	// clears screen for reprint
 	} while (inputError || thanks);
 }
